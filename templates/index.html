@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latin Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+        }
+        .question {
+            font-size: 22px;
+            margin: 20px 0;
+        }
+        .result {
+            font-size: 20px;
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>Latin Test</h1>
+    
+    <button onclick="getQuestion()">Get Question</button>
+    
+    <p class="question" id="latin-word"></p>
+    <p><strong>Enter the meaning:</strong></p>
+    <input type="text" id="answer">
+    <button onclick="checkAnswer()">Submit</button>
+
+    <p class="result" id="result"></p>
+
+    <script>
+        let correctAnswer = "";
+
+        function getQuestion() {
+            fetch('/get_question')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('latin-word').innerText = `Translate: ${data.latin}`;
+                correctAnswer = data.meaning.toLowerCase();
+                document.getElementById('result').innerText = "";
+                document.getElementById('answer').value = "";
+            });
+        }
+
+        function checkAnswer() {
+            let userAnswer = document.getElementById('answer').value.toLowerCase();
+            if (userAnswer === correctAnswer) {
+                document.getElementById('result').innerText = "Correct!";
+                document.getElementById('result').style.color = "green";
+            } else {
+                document.getElementById('result').innerText = "Incorrect. Try again.";
+                document.getElementById('result').style.color = "red";
+            }
+        }
+    </script>
+</body>
+</html>
